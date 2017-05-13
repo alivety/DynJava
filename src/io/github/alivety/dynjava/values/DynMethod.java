@@ -11,4 +11,9 @@ public class DynMethod extends DynObject.DynValue {
 		return null;
 	}
 
+	@Override
+	public void update(Object o) throws DynException {
+		throw new DynException("Cannot update");
+	}
+
 }

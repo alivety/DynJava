@@ -23,6 +23,14 @@ public class DynObject implements DynJavaComponent {
 		} else if (o instanceof Method) {
 			throw new DynException("Use DynObject.declareMethod");
 		}
+		if (variables.containsKey(name)) {
+			if (variables.get(name) instanceof DynValue) {
+				if (put instanceof DynValue) {
+					((DynValue)variables.get(name)).update(((DynValue)put).evaluate());
+					return;
+				}
+			}
+		}
 		variables.put(name, put);
 	}
 	
@@ -53,6 +61,7 @@ public class DynObject implements DynJavaComponent {
 	
 	public static abstract class DynValue implements DynJavaComponent {
 		public abstract Object evaluate() throws DynException;
+		public abstract void update(Object o) throws DynException;
 	}
 	
 	public void dumpVars() {

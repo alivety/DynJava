@@ -1,9 +1,10 @@
 package io.github.alivety.dynjava.values;
 
+import io.github.alivety.dynjava.DynException;
 import io.github.alivety.dynjava.DynObject;
 
 public class DynString extends DynObject.DynValue {
-	final String v;
+	String v;
 	public DynString(String v) {
 		this.v=v;
 	}
@@ -11,5 +12,11 @@ public class DynString extends DynObject.DynValue {
 	@Override
 	public Object evaluate() {
 		return v;
+	}
+
+	@Override
+	public void update(Object o) throws DynException {
+		if (o==null) throw new DynException("Cannot update to null");
+		v=o.toString();
 	}
 }

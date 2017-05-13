@@ -19,7 +19,7 @@ public class DynEnviroment implements DynJavaComponent {
 		return env.getVar(name);
 	}
 	
-	String[] keywords=new String[]{"var","raw"};
+	String[] keywords=new String[]{"var","raw","refvar","print"};
 	String keyword="read";
 	
 	public void interpret(InputStream is) throws IOException, DynException {
@@ -44,6 +44,8 @@ public class DynEnviroment implements DynJavaComponent {
 				interpretRefVar(buf);
 			} else if (keyword.equals("raw")) {
 				interpretRaw(buf);
+			} else if (keyword.equals("print")) {
+				interpretPrint(buf);
 			}
 			
 			env.dumpVars();
@@ -106,6 +108,19 @@ public class DynEnviroment implements DynJavaComponent {
 		keyword="read";
 		
 		System.out.println(env.getRefVar(var));
+	}
+	
+	private void interpretPrint(StringBuilder buffer) throws DynException {
+		String rel=buffer.toString();
+		buffer.setLength(0);
+		for (char c : rel.toCharArray()) {
+			buffer.append(c);
+		}
+		String var=buffer.toString();
+		buffer.setLength(0);
+		keyword="read";
+		
+		System.out.println(env.getVar(var));
 	}
 	
 	private void interpretVar(StringBuilder buffer) throws DynException {
