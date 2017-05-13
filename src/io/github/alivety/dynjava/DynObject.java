@@ -36,11 +36,26 @@ public class DynObject implements DynJavaComponent {
 		return new DynJavaObject(o);
 	}
 	
+	protected Object getRefVar(String name) throws DynException {
+		if (!variables.containsKey(name)) {
+			throw new DynException("There is no variable "+name);
+		}
+		return variables.get(name);
+	}
+	
+	public boolean isDeclared(String name) {
+		return variables.containsKey(name);
+	}
+	
 	public String toString() {
 		return variables.toString();
 	}
 	
-	public interface DynValue extends DynJavaComponent {
-		public Object evaluate() throws DynException;
+	public static abstract class DynValue implements DynJavaComponent {
+		public abstract Object evaluate() throws DynException;
+	}
+	
+	public void dumpVars() {
+		System.out.println(variables);
 	}
 }

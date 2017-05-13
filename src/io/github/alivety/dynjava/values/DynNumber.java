@@ -1,7 +1,7 @@
 package io.github.alivety.dynjava.values;
 import io.github.alivety.dynjava.DynObject;
 
-public class DynNumber implements DynObject.DynValue {
+public class DynNumber extends DynObject.DynValue {
 	private Number num;
 	
 	public DynNumber(Number num) {

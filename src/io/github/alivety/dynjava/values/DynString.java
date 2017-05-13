@@ -2,7 +2,7 @@ package io.github.alivety.dynjava.values;
 
 import io.github.alivety.dynjava.DynObject;
 
-public class DynString implements DynObject.DynValue {
+public class DynString extends DynObject.DynValue {
 	final String v;
 	public DynString(String v) {
 		this.v=v;

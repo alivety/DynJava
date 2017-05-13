@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import io.github.alivety.dynjava.DynException;
 import io.github.alivety.dynjava.DynObject;
 
-public class DynJavaMethod implements DynObject.DynValue {
+public class DynJavaMethod extends DynMethod  {
 	private Object[] args=null;
 	private Method m;
 	private Object o;
