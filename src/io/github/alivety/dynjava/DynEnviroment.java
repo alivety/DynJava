@@ -22,41 +22,15 @@ public class DynEnviroment implements DynJavaComponent {
 	String[] keywords=new String[]{"var","raw","refvar","print"};
 	String keyword="read";
 	
+	
 	public void interpret(InputStream is) throws IOException, DynException {
-		try {
-		BufferedReader in=new BufferedReader(new InputStreamReader(is));
-		StringBuilder buf=new StringBuilder();
+		//remember to lowercase all input
 		String line;
-		while ((line=in.readLine())!=null) {
-			for (char c : line.toCharArray()) {
-				if (c==' ') continue;
-				buf.append(c);
-				if (Arrays.asList(keywords).contains(buf.toString()) ) {
-					if (!keyword.equals("read")) throw new DynException("Malformed DynJava: current executing "+keyword+", received new command "+buf.toString());
-					keyword=buf.toString();
-					buf.setLength(0);//consume token
-				} 
-			}
-			
-			if (keyword.equals("var")) {
-				interpretVar(buf);
-			} else if (keyword.equals("refvar")) {
-				interpretRefVar(buf);
-			} else if (keyword.equals("raw")) {
-				interpretRaw(buf);
-			} else if (keyword.equals("print")) {
-				interpretPrint(buf);
-			}
-			
-			env.dumpVars();
-		}
-		} catch (IOException e) {
-			throw e;
-		} catch (DynException e) {
-			throw e;
-		}
-		catch (Exception e) {
-			throw new DynException(e);
+		StringBuilder master=new StringBuilder();
+		BufferedReader in=new BufferedReader(new InputStreamReader(is));
+		while ((line=in.readLine().toLowerCase())!=null) {
+			if (line.equals("^c")) break;
+			master.append(line);
 		}
 	}
 	
@@ -69,12 +43,15 @@ public class DynEnviroment implements DynJavaComponent {
 			return new BigDecimal(raw);
 		} else if (raw.startsWith("\"") && raw.endsWith("\"")) {//string
 			return raw.substring(1, raw.length()-1);
-		} else {//pass by value variable assignment
+		} else if (raw.equals("nil")) {
+			return null;
+		}
+		else {//pass by value variable assignment
 			return env.getVar(raw);
 		}
 	}
 	
-	private void interpretRefVar(StringBuilder buffer) throws DynException {
+	/*private void interpretRefVar(StringBuilder buffer) throws DynException {
 		String rel=buffer.toString();
 		buffer.setLength(0);
 		String var=null,val=null;
@@ -140,7 +117,7 @@ public class DynEnviroment implements DynJavaComponent {
 		keyword="read";
 		
 		env.setVar(var, determineType(val));
-	}
+	}*/
 	
 	protected DynEnviroment() {}
 	
