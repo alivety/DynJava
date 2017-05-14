@@ -12,7 +12,7 @@ import io.github.alivety.dynjava.DynValue;
  * @author dyslabs
  *
  */
-public class DynJavaMethod extends DynEvaluatableValue<Object> {
+public class DynJavaMethod extends DynMethod {
 	private Object ref;
 	private Method m;
 	
@@ -29,11 +29,6 @@ public class DynJavaMethod extends DynEvaluatableValue<Object> {
 	@Override
 	public Object evaluate(Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, DynException {
 		return DynJava.convert(m.invoke(ref, args));
-	}
-
-	@Override
-	public String getType() {
-		return "nativemethod";
 	}
 
 	@Override

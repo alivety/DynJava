@@ -77,5 +77,8 @@ public class DynJava {
 		DynObject o=(DynObject) DynJava.convert(new DynJava());
 		System.out.println(o);
 		System.out.println(((DynJavaMethod)o.getVar("eatme")).evaluate());//methods are variables !!
+		System.out.println();
+		DynEnviroment env=DynEnviroment.getEnviroment();
+		((DynJavaMethod)env.getVar("print")).evaluate(6);
 	}
 }
