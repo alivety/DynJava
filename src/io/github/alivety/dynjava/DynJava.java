@@ -1,8 +1,12 @@
 package io.github.alivety.dynjava;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 
 import io.github.alivety.dynjava.values.DynJavaMethod;
 import io.github.alivety.dynjava.values.DynNil;
@@ -73,12 +77,19 @@ public class DynJava {
 		System.out.println("please dont");
 	}
 	
-	public static void main(String[]args) throws IllegalArgumentException, IllegalAccessException, DynException, InvocationTargetException {
+	public static void main(String[]args) throws IllegalArgumentException, IllegalAccessException, DynException, InvocationTargetException, FileNotFoundException, IOException {
+		System.out.println(new BigDecimal(0).add(new BigDecimal(8)));
 		DynObject o=(DynObject) DynJava.convert(new DynJava());
+		o.setVar("array", DynJava.convert(new String[]{"hi","u","ok"}));
 		System.out.println(o);
 		System.out.println(((DynJavaMethod)o.getVar("eatme")).evaluate());//methods are variables !!
 		System.out.println();
 		DynEnviroment env=DynEnviroment.getEnviroment();
-		((DynJavaMethod)env.getVar("print")).evaluate(6);
+		env.interpret(new FileInputStream("example.dava"), null);
+		System.out.println("x="+env.getJavaVar("x"));
+		System.out.println("y="+env.getJavaVar("y"));
+		System.out.println("z="+env.getJavaVar("z"));
+		System.out.println("0u="+env.getJavaVar("0u"));
+		System.out.println("m="+env.getJavaVar("m"));
 	}
 }

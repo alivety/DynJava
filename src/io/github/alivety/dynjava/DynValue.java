@@ -1,5 +1,7 @@
 package io.github.alivety.dynjava;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * A DynValue represents any data structure: objects, numbers, strings...
  * @author dyslabs
@@ -19,5 +21,9 @@ public abstract class DynValue {
 	
 	public String toString() {
 		return this.getClass().getSimpleName()+":"+getType();
+	}
+	
+	public String getValue() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, DynException {
+		return toString();
 	}
 }
