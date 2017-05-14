@@ -1,22 +1,28 @@
 package io.github.alivety.dynjava.values;
 
 import io.github.alivety.dynjava.DynException;
-import io.github.alivety.dynjava.DynObject;
+import io.github.alivety.dynjava.DynValue;
 
-public class DynString extends DynObject.DynValue {
-	String v;
-	public DynString(String v) {
-		this.v=v;
+public class DynString extends DynEvaluatableValue<String> {
+	private String s;
+	public DynString(String s) {
+		this.s=s;
 	}
 	
 	@Override
-	public Object evaluate() {
-		return v;
+	public String evaluate(Object... args) {
+		return s;
 	}
 
 	@Override
-	public void update(Object o) throws DynException {
-		if (o==null) throw new DynException("Cannot update to null");
-		v=o.toString();
+	public String getType() {
+		return "string";
 	}
+
+	@Override
+	public void update(DynValue n) throws DynException {
+		if (!(n instanceof DynString)) throw new DynException("Passed reference is not "+getType());
+		this.s=((DynString)n).s;
+	}
+
 }

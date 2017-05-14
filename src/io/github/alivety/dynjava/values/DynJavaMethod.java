@@ -1,38 +1,46 @@
 package io.github.alivety.dynjava.values;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import io.github.alivety.dynjava.DynException;
-import io.github.alivety.dynjava.DynObject;
+import io.github.alivety.dynjava.DynJava;
+import io.github.alivety.dynjava.DynValue;
 
-public class DynJavaMethod extends DynMethod  {
-	private Object[] args=null;
+/**
+ * Defines a dynamic method that links to a Java method
+ * @author dyslabs
+ *
+ */
+public class DynJavaMethod extends DynEvaluatableValue<Object> {
+	private Object ref;
 	private Method m;
-	private Object o;
 	
-	public DynJavaMethod(Method m,Object o) {
+	/**
+	 * ref is the object which m is called from
+	 * @param ref
+	 * @param m
+	 */
+	public DynJavaMethod(Object ref,Method m) {
+		this.ref=ref;
 		this.m=m;
-		this.o=o;
-	}
-	
-	@Override
-	public Object evaluate() throws DynException {
-		if (args==null) {
-			throw new DynException("Call DynMethod.invoke");
-		}
-		Object res;
-		try {
-			res=m.invoke(o,args);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			this.args=null;
-			throw new DynException(e);
-		}
-		this.args=null;
-		return res;
 	}
 
-	public Object invoke(Object[]args) throws DynException {
-		this.args=args;
-		return this.evaluate();
+	@Override
+	public Object evaluate(Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, DynException {
+		return DynJava.convert(m.invoke(ref, args));
+	}
+
+	@Override
+	public String getType() {
+		return "nativemethod";
+	}
+
+	@Override
+	public void update(DynValue n) throws DynException {
+		if (!(n instanceof DynJavaMethod)) throw new DynException("Passed reference is not "+getType());
+		DynJavaMethod djm=(DynJavaMethod)n;
+		this.ref=djm.ref;
+		this.m=djm.m;
 	}
 }
