@@ -6,7 +6,5 @@ import io.github.alivety.dynjava.DynException;
 import io.github.alivety.dynjava.DynValue;
 
 public abstract class DynEvaluatableValue<R> extends DynValue {
-	public abstract R evaluate(Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, DynException;public String toString() {
-		return this.getClass().getSimpleName()+":"+getType();
-	}
+	public abstract R evaluate(Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, DynException;
 }
